@@ -46,7 +46,4 @@ fn find_and_replace(env: &String, content: String) -> String {
         let (_, post) = content.split_at(start_index + "${".len() + end_index + "}".len());
         return find_and_replace(env, format!("{}{}{}", pre, value, post));
     }
-
-
-
 }

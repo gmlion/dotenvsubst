@@ -40,10 +40,10 @@ fn find_and_replace(env: &String, content: String) -> String {
         let (_, continuation) = content.split_at(start_index + "${".len());
         let end_index = continuation.find("}").expect("Error: unmatched ${");
         let (key, _) = continuation.split_at(end_index);
-        let value = get_env(env, key.into()).unwrap_or_default();
+        let value = get_env(env, key.into()).unwrap_or(format!("${{{}}}", key));
         
         let (pre, _) = content.split_at(start_index);
         let (_, post) = content.split_at(start_index + "${".len() + end_index + "}".len());
-        return find_and_replace(env, format!("{}{}{}", pre, value, post));
+        return format!("{}{}{}", pre, value, find_and_replace(env, post.into()));
     }
 }

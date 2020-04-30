@@ -31,7 +31,7 @@ fn get_env(env: &String, key: String) -> Option<String> {
     None
 }
 
-fn find_and_replace(env: &String, content: String) -> String {
+pub fn find_and_replace(env: &String, content: String) -> String {
     let start_index = content.find("${");
     if start_index.is_none() {
         return content;
@@ -46,4 +46,33 @@ fn find_and_replace(env: &String, content: String) -> String {
         let (_, post) = content.split_at(start_index + "${".len() + end_index + "}".len());
         return format!("{}{}{}", pre, value, find_and_replace(env, post.into()));
     }
+}
+
+#[cfg(test)]
+mod tests {
+    const ENV: &str = "
+    TEST1=aaa
+    TEST2=bbb
+    TEST3=${should_be_kept}
+    #Comment
+    Should be ignored as well
+    TEST4=ccc
+    ";
+
+    #[test]
+    fn replace() {
+        let input = "
+        Lorem ipsum ${TEST1} lorem $NOACTION ${MISSING} text ${TEST2}
+        ${TEST3}
+        ${TEST4}
+        ";
+        let replaced = super::find_and_replace(&String::from(ENV), input.into());
+        print!("{}", replaced);
+        assert_eq!("
+        Lorem ipsum aaa lorem $NOACTION ${MISSING} text bbb
+        ${should_be_kept}
+        ccc
+        ", replaced);
+    }
+
 }

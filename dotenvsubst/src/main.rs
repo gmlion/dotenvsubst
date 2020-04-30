@@ -37,9 +37,9 @@ fn find_and_replace(env: &String, content: String) -> String {
         return content;
     } else {
         let start_index = start_index.expect("Unmanaged error") ;
-        let (before, continuation) = content.split_at(start_index + "${".len());
+        let (_, continuation) = content.split_at(start_index + "${".len());
         let end_index = continuation.find("}").expect("Error: unmatched ${");
-        let (key, continuation) = continuation.split_at(end_index);
+        let (key, _) = continuation.split_at(end_index);
         let value = get_env(env, key.into()).unwrap_or_default();
         
         let (pre, _) = content.split_at(start_index);

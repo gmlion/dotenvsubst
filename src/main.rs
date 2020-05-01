@@ -1,20 +1,30 @@
 use std::io::{self, Read, Write};
 
-fn main() -> io::Result<()> {
+#[derive(Debug)]
+enum Error {
+    InputError(String),
+    OutputError(String)
+}
+
+
+fn main() -> Result<(), Error> {
     let env_file_arg = std::env::args().nth(1);
     let env_file_path = match env_file_arg {
-        Some(file) => std::path::PathBuf::from(file),
-        None => std::path::PathBuf::from(".env")
+        Some(file) => String::from(file),
+        None => String::from(".env")
     };
 
-    let env = std::fs::read_to_string(env_file_path).expect("Error: cannot read .env file");
+    let env = std::fs::read_to_string(&env_file_path)
+        .map_err(|err| Error::InputError(format!("Cannot read file `{}`: {}", env_file_path, err)))?;
 
     let mut input_buffer = String::new();
-    io::stdin().read_to_string(&mut input_buffer)?;
+    io::stdin().read_to_string(&mut input_buffer)
+        .map_err(|err| Error::InputError(format!("Cannot read standard input: {}", err)))?;
 
     let replaced = find_and_replace(&env, input_buffer);
 
-    io::stdout().write_all(&replaced.into_bytes())?;
+    io::stdout().write_all(&replaced.into_bytes())
+        .map_err(|err| Error::OutputError(format!("Cannot write to standard output: {}", err)))?;
     Ok(())
 }
 

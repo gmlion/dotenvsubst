@@ -5,7 +5,7 @@ authors = ["Gianmarco Leone <gianmarco.leone@gmail.com>"]
 edition = "2018"
 license = "GPL-3.0"
 readme = "README.md"
-keywords = ["cli", "search", "replace", "dotenv", "environment", "config", "env", "substitution"]
+keywords = ["search", "replace", "dotenv", "environment", "env"]
 description = "A zero-dependency cli tool to search and replace environment variables from .env files"
 categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

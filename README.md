@@ -3,6 +3,9 @@
 # dotenvsubst #
 *dotenvsubst* is a little command line utility to substitute environment variables
 
+## HOW TO INSTALL ##
+`cargo install dotenvsubst`. You need to have [Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html) installed.
+
 ## SYNOPSIS ##
 dotenvsubst [ENVFILE]
 

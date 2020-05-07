@@ -1,30 +1,29 @@
 use std::io::{self, Read, Write};
+use failure::ResultExt;
+use exitfailure::ExitFailure;
+use structopt::StructOpt;
 
-#[derive(Debug)]
-enum Error {
-    InputError(String),
-    OutputError(String)
+#[derive(StructOpt)]
+struct Cli {
+    #[structopt(parse(from_os_str), default_value = ".env")]
+    env_path: std::path::PathBuf
 }
 
+fn main() -> Result<(), ExitFailure> {
+    let args = Cli::from_args();
+    let env_file_arg = args.env_path;
 
-fn main() -> Result<(), Error> {
-    let env_file_arg = std::env::args().nth(1);
-    let env_file_path = match env_file_arg {
-        Some(file) => String::from(file),
-        None => String::from(".env")
-    };
-
-    let env = std::fs::read_to_string(&env_file_path)
-        .map_err(|err| Error::InputError(format!("Cannot read file `{}`: {}", env_file_path, err)))?;
+    let env = std::fs::read_to_string(&env_file_arg)
+        .with_context(|_| format!("Cannot read file `{}`", env_file_arg.to_string_lossy()))?;
 
     let mut input_buffer = String::new();
     io::stdin().read_to_string(&mut input_buffer)
-        .map_err(|err| Error::InputError(format!("Cannot read standard input: {}", err)))?;
+        .with_context(|_| format!("Cannot read standard input"))?;
 
     let replaced = find_and_replace(&env, input_buffer);
 
     io::stdout().write_all(&replaced.into_bytes())
-        .map_err(|err| Error::OutputError(format!("Cannot write to standard output: {}", err)))?;
+        .with_context(|_| format!("Cannot write to standard output"))?;
     Ok(())
 }
 

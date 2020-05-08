@@ -4,6 +4,10 @@ use exitfailure::ExitFailure;
 use structopt::StructOpt;
 
 #[derive(StructOpt)]
+/// Standard input is copied to standard output, with reference to environment variables of the form ${VARIABLE} being replaced with corresponding values read from the specified ENVFILE. If no ENVFILE is specified, the program looks for a .env file in the current directory.
+/// 
+/// The syntax for the ENVFILE is composed of variables on new lines in the form of NAME=VALUE.
+
 struct Cli {
     #[structopt(parse(from_os_str), default_value = ".env")]
     env_path: std::path::PathBuf

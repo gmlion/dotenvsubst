@@ -10,7 +10,7 @@
 dotenvsubst [ENVFILE]
 
 ## DESCRIPTION ##
-Standard input is copied to standard output, with reference to environment variables of the form `${VARIABLE}` being replaced with corresponding values read from the specified ENVFILE. If no ENVFILE is specified, the program looks for a .env file in the current directory.
+Standard input is copied to standard output, with reference to environment variables of the form `${VARIABLE}` being replaced with corresponding values read from the specified ENVFILE. If no ENVFILE is specified, the program looks for a .env file in the current directory.  If the environment variable is not found, the text is kept intact.
 The syntax for the ENVFILE is composed of variables on new lines in the form of `NAME=VALUE`.
 
 ## EXAMPLES ##

@@ -20,6 +20,6 @@ Using a custom .env_custom ENVFILE on bash:
 Using default .env file in Powershell:
 `Get-Content file.sh | dotenvsubst > file_env.sh`
 
-As an example of a specific use case, you can create specific Dockerfiles from a template and .env files
-`cat Dockerfile.template | dotensubst .env.development > Dockerfile.development`
-`cat Dockerfile.template | dotensubst .env.production > Dockerfile.production`
+As an example of a specific use case, you can create specific Dockerfiles from a template and .env files  
+`cat Dockerfile.template | dotenvsubst .env.development > Dockerfile.development`  
+`cat Dockerfile.template | dotenvsubst .env.production > Dockerfile.production`
